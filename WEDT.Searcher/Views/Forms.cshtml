@@ -1,0 +1,49 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<List<WEDT.Searcher.Models.TermFormsModel>>
+
+@{
+    Layout = "Views/_Layout.cshtml";
+}
+
+<h1>Zapytanie "@ViewBag.QueryText"</h1>
+<br/>
+<h3>Wybierz formy wyrazów:</h3>
+<br/>
+
+<form method="post" action="/search">
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        <div class="form-group">
+            <h4>@Model[i].Term</h4>
+            <input name="Term[@i]" type="hidden" value="@Model[i].Term">
+
+            @if (Model[i].AvailableForms.Count > 1)
+            {
+                <select class="form-control" name="Form[@i]">
+                    @foreach (var form in Model[i].AvailableForms)
+                    {
+                        <option value="@form.Value">@form.Text</option>
+                    }
+                </select>
+            }
+            else if (Model[i].AvailableForms.Count == 1)
+            {
+                <span>@Model[i].AvailableForms[0].Text</span>
+                <input name="Form[@i]" type="hidden" value="@Model[i].AvailableForms[0].Value">
+            }
+            else
+            {
+                <span>Nie zidentyfikowano</span>
+            }
+            
+        </div>
+    }      
+    <br/>
+    <div class="form-group">
+        <input type="submit" value="Szukaj" class="btn btn-default" />
+    </div>
+</form>
+
+
+
+
+
